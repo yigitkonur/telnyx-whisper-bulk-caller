@@ -47,3 +47,38 @@ To use the application, follow these steps:
 Please ensure to replace the placeholder `xxxxxxxxxxxxxxx` in the code with your actual API keys and other required values such as the connection_id for Telnyx, the 'from' number for making calls, and the sound file's URL.
 
 Also, note that this application assumes the Flask server and your Telnyx account are properly configured to handle the webhook events.
+
+
+# Audio Transcription Application Documentation
+
+The second Python script (transcriber.py) is designed to transcribe a bulk of audio files using OpenAI's API. It searches for audio files in a specified directory, transcribes the content of each file, and then stores the transcriptions in a Tab-Separated Values (TSV) file. It supports different audio formats including mp3, mp4, mpeg, mpga, m4a, wav, and webm.
+
+## Key Functions
+
+1. `transcribe_audio(filename)`: This function transcribes a given audio file using OpenAI's API. It applies an exponential backoff strategy to handle possible exceptions during the transcription process.
+
+## Workflow of the Script
+
+1. The script begins by setting the OpenAI API key. Make sure to replace `'sk-xxxxxxxxxx'` with your actual OpenAI API key.
+
+2. The directory where the audio files are stored is specified. Change this to the directory path on your local machine where your audio files are stored.
+
+3. It then prepares a list of all audio files in the specified directory.
+
+4. A TSV file named `transcriptions.tsv` is created to store the transcriptions. Each row in the file represents an audio file and contains two fields: the filename and the transcription of the text in the audio file.
+
+5. A progress bar is created using the Rich library to track the transcription process.
+
+6. The script uses a ThreadPoolExecutor to concurrently transcribe multiple audio files. For each completed transcription, the result is written to the TSV file and the progress bar is updated.
+
+## Usage
+
+To use this script, ensure that you have the OpenAI Python client set up correctly and that the OPENAI_API_KEY environment variable is set to your OpenAI API key. Also, make sure to replace the directory path with the path of the directory that contains the audio files you want to transcribe.
+
+Then, simply run the script. It will transcribe all the audio files in the specified directory and write the transcriptions to a TSV file named `transcriptions.tsv`.
+
+## Important Note
+
+This script uses a max_workers value of 3 for the ThreadPoolExecutor. This means that it will transcribe up to three audio files concurrently. You can adjust this value as needed based on the capabilities of your machine and the rate limits of your OpenAI API key.
+
+Also, the script assumes that your OpenAI API key has sufficient privileges to use the Audio API for transcribing audio files.
